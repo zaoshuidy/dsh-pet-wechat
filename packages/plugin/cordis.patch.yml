@@ -1,0 +1,8 @@
+# 小满：人设 + 人味 + 表情包 + 微信通道，一次装齐。
+- insert:
+    - id: im-connect
+      name: '@michengai/dsh-im-connect'
+    - id: dsh-expression
+      name: dsh-meme
+    - id: pet-persona
+      name: dsh-pet-wechat

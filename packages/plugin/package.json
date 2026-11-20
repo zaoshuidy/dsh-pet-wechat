@@ -1,0 +1,23 @@
+{
+  "name": "dsh-pet-wechat",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "description": "小满：微信里的情绪化宠物（人设 + 人味 + 记忆工具 + 表情包 + 微信通道）",
+  "exports": {
+    ".": "./index.js",
+    "./locale/*.json": "./locale/*.json"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "peerDependencies": {
+    "@deepseek-ai/dsh-tools": "*"
+  },
+  "dependencies": {
+    "@michengai/dsh-im-connect": "^1.0.47",
+    "dsh-meme": "^0.1.85"
+  }
+}
