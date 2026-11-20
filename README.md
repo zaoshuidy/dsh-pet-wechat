@@ -1,8 +1,19 @@
 # 小满 · DeepSeek Harness 微信宠物
 
+![version](https://img.shields.io/badge/version-v0.2.0-4D6BFE)
+![license](https://img.shields.io/badge/license-MIT-4C9A6A)
+![tests](https://img.shields.io/badge/tests-40%20passing-4C9A6A)
+
 把「人设 + 人味 + 情绪/记忆 + 表情包 + 微信通道」打包成一个 DSH 插件，装一次就能在微信里聊。
 
 > 不是助手，是住在微信里的朋友：会学你说话、有情绪、记得住旧事。
+
+## 架构
+
+![情感与记忆架构](docs/architecture.png)
+
+左边是情感：情绪（秒）→ 心情（时）→ 好感（周–月）→ 性格（固定），四层衰减、汇成一个「表达出口」。
+右边是记忆：`pet_remember` 写库、`pet_recall` 按话题取、两种压缩——上下文到 256K 强制归档（handoff），空闲 45 分钟做梦合并（dream）。
 
 ## 它是什么
 
@@ -38,10 +49,20 @@ docs/
 
 ## 安装
 
-1. 先装 DSH，确认版本 ≥ 0.2.2。
-2. 插件页 → Add plugin → 选本仓库的 `packages/plugin` 目录。
-3. 重启 DSH。
-4. 设置 → IM 助理 → 添加账号 → 微信 → 扫码（手机微信需有 ClawBot 入口）。
+### 方式一：从 Release 装（推荐）
+
+1. 打开 [Releases](https://github.com/zaoshuidy/dsh-pet-wechat/releases)，下载最新 `Source code (zip)`。
+2. 解压，得到 `dsh-pet-wechat-0.2.0/packages/plugin` 目录。
+3. DSH → 插件 → **Add plugin** → 选这个 `packages/plugin` 目录。
+4. 重启 DSH。
+5. 设置 → IM 助理 → 添加账号 → 微信 → 扫码（手机微信需有 ClawBot 入口）。
+
+### 方式二：从源码装
+
+```bash
+git clone https://github.com/zaoshuidy/dsh-pet-wechat
+# DSH → 插件 → Add plugin → 选 packages/plugin
+```
 
 ## 微信侧限制
 
