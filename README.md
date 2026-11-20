@@ -2,7 +2,7 @@
 
 ![version](https://img.shields.io/badge/version-v0.2.0-4D6BFE)
 ![license](https://img.shields.io/badge/license-MIT-4C9A6A)
-![tests](https://img.shields.io/badge/tests-40%20passing-4C9A6A)
+![tests](https://img.shields.io/badge/tests-44-4C9A6A)
 
 把「人设 + 人味 + 情绪/记忆 + 表情包 + 微信通道」打包成一个 DSH 插件，装一次就能在微信里聊。
 
@@ -31,9 +31,15 @@
 | 跨对话记忆 | 事件、事实、喜好、关系四类，按话题混合召回（图 + 关键词 + 向量，RRF 融合） |
 | 强制压缩 | 上下文到 256K（可调）自动归档：写一条 `kind:handoff` 交接记忆，下条消息开新会话 |
 | 空闲做梦 | 45 分钟没动静，把同话题 ≥3 条的零散事件合并成 `kind:dream`，并做衰减 |
-| 情绪四层 | 秒级情绪 → 小时级心情 → 长期好感 → 固定性格；数值插件维护，模型只能给变化量 |
+| 情绪四层 | 秒级情绪 → 小时级心情 → 长期好感 → 固定性格；每条都有明确的时间常数与半衰期，详见 [docs/EMOTION.md](docs/EMOTION.md) |
+| 情绪触发 | 8 类关键词规则兜底（夸/骂/累/晚安…），模型 state 再覆盖；单轮有上限，不越界 |
 | 性格漂移 | 句长、emoji、语气词等 6 维，±10% 内向对方靠拢，长期不聊回弹 |
 | 人味规则 | 1–3 句、不寒暄不总结、像微信打字、不每句反问 |
+
+## 文档
+
+- [docs/EMOTION.md](docs/EMOTION.md)：四层状态、衰减曲线、触发规则、优先级
+- [docs/DESIGN.md](docs/DESIGN.md)：整体设计（关系图 + RAG、渐进披露、上下文预算）
 
 ## 目录
 

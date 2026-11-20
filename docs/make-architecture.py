@@ -153,8 +153,10 @@ arrow(1400, 592, 1380, 636, BLUE)
 text(48, 962, "核心：模型给「发生了什么」，插件算「你什么状态、记得什么」——数值不可自报篡改。", 17, GRAY)
 
 # 左侧补充说明
-text(76, 800, "四层状态都落 SQLite，重启不丢", 18, GRAY)
-text(76, 830, "时间尺度：秒 → 小时 → 周 → 固定", 17, GRAY)
+text(76, 790, "四层状态都落 SQLite，重启不丢", 18, GRAY)
+text(76, 818, "时间尺度：秒 → 小时 → 周 → 固定", 17, GRAY)
+text(76, 856, "触发规则 8 类：夸 / 骂 / 累 / 晚安… → ±0.5~1.5", 17, GRAY)
+text(76, 884, "规则先跑，模型 state 再覆盖；单轮封顶", 17, GRAY)
 
 img.save(os.path.join(os.path.dirname(__file__), "architecture.png"))
 print("saved")

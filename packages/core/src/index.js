@@ -11,6 +11,7 @@ import { buildPrompt } from './core/prompt.js';
 import { createLlm } from './core/llm.js';
 import { createSticker } from './modules/sticker.js';
 import { appendEmoji } from './modules/emoji.js';
+import { matchTriggers } from './modules/triggers.js';
 import { fileURLToPath } from 'node:url';
 
 function takeBlock(raw, name) {
@@ -150,6 +151,11 @@ export function createPet({ dbFile = ':memory:', personaFile, llm, budget = DEFA
     }
     style.observe(id, input);
     affect.tick(id, now());
+
+    // 2.5) 确定性触发规则：给这一轮一个兜底判断（模型 state 仍可覆盖）
+    const trig = matchTriggers(input);
+    if (trig.delta) affect.apply(id, trig.delta, 'rule');
+    if (trig.labels.length) affect.setEmotion(id, trig.labels[0], 40);
 
     const recalled = memory.recall(id, [input, ...shortterm.messages(id).filter((m) => m.role === 'user').slice(-2).map((m) => m.content)].join(' '), { limit: 3 }) || {};
     const items = recalled.items || [];
