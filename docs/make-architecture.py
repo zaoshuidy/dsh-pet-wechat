@@ -1,7 +1,7 @@
 from PIL import Image, ImageDraw, ImageFont
 import os
 
-W, H = 1600, 1000
+W, H = 1600, 1220
 BG = (247, 244, 238)
 INK = (43, 42, 39)
 GRAY = (138, 133, 124)
@@ -151,6 +151,65 @@ arrow(1120, 592, 1000, 636, RED)
 arrow(1400, 592, 1380, 636, BLUE)
 
 text(48, 962, "核心：模型给「发生了什么」，插件算「你什么状态、记得什么」——数值不可自报篡改。", 17, GRAY)
+
+# ============ 底部：衰减曲线 + 触发规则 ============
+import math
+
+box(48, 1000, 900, 1180)
+text(76, 1018, "衰减曲线：偏离量还剩多少（0–6 小时）", 22, INK, True)
+
+# 坐标区
+x0, x1, y0, y1 = 120, 590, 1150, 1060
+d.line([x0, y0, x1, y0], fill=LINE, width=2)
+d.line([x0, y0, x0, y1], fill=LINE, width=2)
+for h in (0, 2, 4, 6):
+    x = x0 + (x1 - x0) * h / 6
+    d.line([x, y0, x, y0 + 4], fill=LINE, width=1)
+    text(x, y0 + 8, f"{h}h", 12, GRAY, anchor="ma")
+
+text(x0 - 8, y1, "1.0", 12, GRAY, anchor="ra")
+text(x0 - 8, (y0 + y1) / 2, "0.5", 12, GRAY, anchor="rm")
+text(x0 - 8, y0, "0", 12, GRAY, anchor="rm")
+
+curves = [
+    ("情绪 30s", 30 / 3600, RED),
+    ("心情 2h", 2, AMBER),
+    ("精力 3h", 3, GREEN),
+]
+for name, tau, color in curves:
+    pts = []
+    for i in range(61):
+        h = 6 * i / 60
+        v = math.exp(-h / tau) if tau > 0.001 else 0
+        pts.append((x0 + (x1 - x0) * h / 6, y0 - (y0 - y1) * v))
+    d.line(pts, fill=color, width=3, joint="curve")
+
+# 图例（右侧竖排，避免和曲线尾巴打架）
+for i, (name, tau, color) in enumerate(curves):
+    ly = 1072 + i * 34
+    d.line([632, ly, 662, ly], fill=color, width=3)
+    text(672, ly - 9, name, 14, color)
+
+box(920, 1000, 1552, 1180)
+text(948, 1018, "触发规则（8 类，±0.5~1.5）", 22, INK, True)
+rules = [
+    ("夸 / 想你", "mood +1 · 好感 +0.5"),
+    ("骂 / 讨厌", "mood −1.5 · 好感 −0.5"),
+    ("累 / 加班", "mood −1 · 精力 −1"),
+    ("晚安 / 睡了", "精力 −0.5"),
+    ("道歉 / 我错了", "mood +0.5 · 好感 +0.5"),
+    ("撒娇 / 陪我", "mood +0.5 · 好感 +0.5"),
+    ("好消息 / 升职", "mood +1"),
+    ("好久不见", "mood +1 · 好感 +0.5"),
+]
+for i, (k, v) in enumerate(rules):
+    col, row = i % 2, i // 2
+    x = 948 + col * 310
+    y = 1054 + row * 30
+    text(x, y, k, 15, INK, True)
+    text(x + 120, y, v, 14, GRAY)
+
+text(48, 1200, "规则先跑（兜底）→ 模型 state 覆盖（上限 ±6）→ 时间衰减回落；所有值钳在 0–100。", 16, GRAY)
 
 # 左侧补充说明
 text(76, 790, "四层状态都落 SQLite，重启不丢", 18, GRAY)
